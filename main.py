@@ -27,6 +27,10 @@ def callback():
 
     return 'OK'
 
+@app.route('/')
+def home():
+    return 'ok'
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     token = event.reply_token
