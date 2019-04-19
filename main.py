@@ -10,6 +10,8 @@ load_dotenv()
 
 repo = git.cmd.Git(os.environ['GIT_REPOSITORY'])
 
+admin = os.environ['CHIKA_ADMIN'].split(',')
+
 app = Flask(__name__)
 line_bot_api = LineBotApi(os.environ['LINE_CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['LINE_CHANNEL_SECRET'])
@@ -36,8 +38,10 @@ def handle_message(event):
     token = event.reply_token
     message = event.message.text
     source = event.source.user_id
-    if message == 'ok':
-        print(source)
+    if message == 'pull':
+        if source in admin:
+            response = repo.pull()
+            line_bot_api.reply_message(token, response)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8443, ssl_context=('/etc/letsencrypt/live/rahandi.southeastasia.cloudapp.azure.com/fullchain.pem', '/etc/letsencrypt/live/rahandi.southeastasia.cloudapp.azure.com/privkey.pem'))
