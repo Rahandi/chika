@@ -19,7 +19,7 @@ line_bot_api = LineBotApi(os.environ['LINE_CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['LINE_CHANNEL_SECRET'])
 
 def restart():
-    os.execv(__file__, sys.argv)
+    os.execv(sys.executable, ['python3']+sys.argv)
 
 @app.route('/callback', methods=['POST'])
 def callback():
