@@ -43,7 +43,7 @@ def handle_message(event):
     token = event.reply_token
     message = event.message.text
     source = event.source.user_id
-    if message == 'pull':
+    if message == 'main pull':
         if source in admin:
             response = repo.pull()
             response = '[MAIN REPO]\n' + response
