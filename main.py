@@ -42,6 +42,8 @@ def handle_message(event):
         if source in admin:
             response = repo.pull()
             line_bot_api.reply_message(token, TextSendMessage(text=response))
+    elif message == 'ok':
+        line_bot_api.reply_message(token, TextMessage(text='ok'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8443, ssl_context=('/etc/letsencrypt/live/rahandi.southeastasia.cloudapp.azure.com/fullchain.pem', '/etc/letsencrypt/live/rahandi.southeastasia.cloudapp.azure.com/privkey.pem'))
