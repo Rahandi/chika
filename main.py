@@ -35,7 +35,7 @@ def home():
 def handle_message(event):
     token = event.reply_token
     message = event.message.text
-    source = event.source['userId']
+    source = event.source.user_id
     if message == 'ok':
         print(source)
 
