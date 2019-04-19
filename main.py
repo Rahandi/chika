@@ -43,29 +43,29 @@ def handle_message(event):
     token = event.reply_token
     message = event.message.text
     source = event.source.user_id
-    if message == 'main pull':
+    if message == 'chika main pull':
         if source in admin:
             response = repo.pull()
             response = '[MAIN REPO]\n' + response
             line_bot_api.reply_message(token, TextSendMessage(text=response))
         else:
             line_bot_api.reply_message(token, TextSendMessage(text='who are you?'))
-    elif message == 'chika pull':
+    elif message == 'chika self pull':
         if source in admin:
             response = chika_repo.pull()
             response = '[CHIKA REPO]\n' + response
             line_bot_api.reply_message(token, TextSendMessage(text=response))
         else:
             line_bot_api.reply_message(token, TextSendMessage(text='who are you?'))
-    elif message == 'restart':
+    elif message == 'chika restart':
         if source in admin:
             line_bot_api.reply_message(token, TextSendMessage(text='restarting'))
             restart()
         else:
             line_bot_api.reply_message(token, TextSendMessage(text='who are you?'))
-    elif message == 'ok':
+    elif message == 'chika test':
         line_bot_api.reply_message(token, TextSendMessage(text='ok'))
-    elif message == 'userId':
+    elif message == 'chika userId':
         line_bot_api.reply_message(token, TextSendMessage(text=str(source)))
 
 if __name__ == '__main__':
