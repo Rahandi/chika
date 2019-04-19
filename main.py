@@ -1,4 +1,5 @@
 import os
+import sys
 import git
 from dotenv import load_dotenv
 from flask import Flask, request, abort
@@ -9,12 +10,16 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 load_dotenv()
 
 repo = git.cmd.Git(os.environ['GIT_REPOSITORY'])
+chika_repo = git.cmd.Git(os.environ['CHIKA_REPOSITORY'])
 
 admin = os.environ['CHIKA_ADMIN'].split(',')
 
 app = Flask(__name__)
 line_bot_api = LineBotApi(os.environ['LINE_CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['LINE_CHANNEL_SECRET'])
+
+def restart():
+    os.execv(__file__, sys.argv)
 
 @app.route('/callback', methods=['POST'])
 def callback():
@@ -42,8 +47,15 @@ def handle_message(event):
         if source in admin:
             response = repo.pull()
             line_bot_api.reply_message(token, TextSendMessage(text=response))
+    elif message == 'chika pull':
+        if source in admin:
+            response = chika_repo.pull()
+            line_bot_api.reply_message(token, TextSendMessage(text=response))
+    elif message == 'restart':
+        line_bot_api.reply_message(token, TextSendMessage(text='restarting'))
+        restart()
     elif message == 'ok':
-        line_bot_api.reply_message(token, TextMessage(text='ok'))
+        line_bot_api.reply_message(token, TextSendMessage(text='ok'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8443, ssl_context=('/etc/letsencrypt/live/rahandi.southeastasia.cloudapp.azure.com/fullchain.pem', '/etc/letsencrypt/live/rahandi.southeastasia.cloudapp.azure.com/privkey.pem'))
