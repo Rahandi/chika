@@ -56,6 +56,8 @@ def handle_message(event):
         restart()
     elif message == 'ok':
         line_bot_api.reply_message(token, TextSendMessage(text='ok'))
+    elif message == 'userId':
+        line_bot_api.reply_message(token, TextSendMessage(text=str(source)))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8443, ssl_context=('/etc/letsencrypt/live/rahandi.southeastasia.cloudapp.azure.com/fullchain.pem', '/etc/letsencrypt/live/rahandi.southeastasia.cloudapp.azure.com/privkey.pem'))
