@@ -27,6 +27,8 @@ imgur_client = ImgurClient(
     os.environ['IMGUR_REFRESH_TOKEN']
 )
 
+flag_removebg = 0
+
 def getContent(msg_id):
     message_content = line_bot_api.get_message_content(str(msg_id))
     try:
@@ -103,15 +105,23 @@ def handle_text(event):
         line_bot_api.reply_message(token, TextSendMessage(text='ok'))
     elif message == 'chika userId':
         line_bot_api.reply_message(token, TextSendMessage(text=str(source)))
+    elif message == 'chika removebg':
+        if flag_removebg:
+            flag_removebg = 0
+            line_bot_api.reply_message(token, TextSendMessage(text='removebg off'))
+        else:
+            flag_removebg = 1
+            line_bot_api.reply_message(token, TextSendMessage(text='removebg on'))
 
 @handler.add(MessageEvent, message=ImageMessage)
 def handle_image(event):
     token = event.reply_token
     message_id = event.message.id
-    path = getContent(message_id)
-    path = removebgAPI(path)
-    link = uploadToImgur(path)
-    line_bot_api.reply_message(token, ImageSendMessage(original_content_url=link, preview_image_url=link))
+    if flag_removebg:
+        path = getContent(message_id)
+        path = removebgAPI(path)
+        link = uploadToImgur(path)
+        line_bot_api.reply_message(token, ImageSendMessage(original_content_url=link, preview_image_url=link))
 
 @handler.default()
 def default(event):
