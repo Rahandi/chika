@@ -33,7 +33,7 @@ def getContent(msg_id):
         os.mkdir('saved_content')
     except:
         pass
-    with open('saved_content/' + str(msg_id)) as f:
+    with open('saved_content/' + str(msg_id), 'wb') as f:
         for chunk in message_content.iter_content():
             f.write(chunk)
     return 'saved_content/' + str(msg_id)
@@ -49,7 +49,7 @@ def removebgAPI(path):
     path[-1] = path[-1] + '_removebg'
     path = '/'.join(path)
     if response.status_code == 200:
-        with open('saved_contents', 'wb') as out:
+        with open(path, 'wb') as out:
             out.write(response.content)
     return path
 
