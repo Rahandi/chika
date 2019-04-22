@@ -78,6 +78,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text(event):
+    global flag_removebg
     token = event.reply_token
     message = event.message.text
     source = event.source.user_id
