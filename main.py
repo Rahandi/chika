@@ -122,10 +122,10 @@ def handle_image(event):
     message_id = event.message.id
     if flag_removebg:
         path = getContent(message_id)
-        if path == 'failed':
-            line_bot_api.reply_message(token, TextSendMessage='failed')
-            return
         path = removebgAPI(path)
+        if path == 'failed':
+            line_bot_api.reply_message(token, TextSendMessage(text='failed'))
+            return
         link = uploadToImgur(path)
         line_bot_api.reply_message(token, ImageSendMessage(original_content_url=link, preview_image_url=link))
 
