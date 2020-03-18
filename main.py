@@ -11,10 +11,10 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageMess
 
 load_dotenv()
 
-repo = git.cmd.Git(os.environ['GIT_REPOSITORY'])
+# repo = git.cmd.Git(os.environ['GIT_REPOSITORY'])
 chika_repo = git.cmd.Git(os.environ['CHIKA_REPOSITORY'])
 
-admin = os.environ['CHIKA_ADMIN'].split(',')
+# admin = os.environ['CHIKA_ADMIN'].split(',')
 
 app = Flask(__name__)
 line_bot_api = LineBotApi(os.environ['LINE_CHANNEL_ACCESS_TOKEN'])
@@ -84,14 +84,7 @@ def handle_text(event):
     token = event.reply_token
     message = event.message.text
     source = event.source.user_id
-    if message == 'chika main pull':
-        if source in admin:
-            response = repo.pull()
-            response = '[MAIN REPO]\n' + response
-            line_bot_api.reply_message(token, TextSendMessage(text=response))
-        else:
-            line_bot_api.reply_message(token, TextSendMessage(text='who are you?'))
-    elif message == 'chika self pull':
+    if message == 'chika self pull':
         if source in admin:
             response = chika_repo.pull()
             response = '[CHIKA REPO]\n' + response
