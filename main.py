@@ -20,12 +20,12 @@ app = Flask(__name__)
 line_bot_api = LineBotApi(os.environ['LINE_CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['LINE_CHANNEL_SECRET'])
 
-imgur_client = ImgurClient(
-    os.environ['IMGUR_CLIENT_ID'], 
-    os.environ['IMGUR_CLIENT_SECRET'],
-    os.environ['IMGUR_ACCESS_TOKEN'],
-    os.environ['IMGUR_REFRESH_TOKEN']
-)
+# imgur_client = ImgurClient(
+#     os.environ['IMGUR_CLIENT_ID'], 
+#     os.environ['IMGUR_CLIENT_SECRET'],
+#     os.environ['IMGUR_ACCESS_TOKEN'],
+#     os.environ['IMGUR_REFRESH_TOKEN']
+# )
 
 flag_removebg = 0
 
