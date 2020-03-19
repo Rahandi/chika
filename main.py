@@ -14,7 +14,7 @@ load_dotenv()
 # repo = git.cmd.Git(os.environ['GIT_REPOSITORY'])
 chika_repo = git.cmd.Git(os.environ['CHIKA_REPOSITORY'])
 
-# admin = os.environ['CHIKA_ADMIN'].split(',')
+admin = os.environ['CHIKA_ADMIN'].split(',')
 
 app = Flask(__name__)
 line_bot_api = LineBotApi(os.environ['LINE_CHANNEL_ACCESS_TOKEN'])
