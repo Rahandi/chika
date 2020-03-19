@@ -40,6 +40,7 @@ def getContent(msg_id):
     return 'saved_content/' + str(msg_id)
 
 def removebgAPI(path):
+    print(os.environ['REMOVEBG_KEY'])
     response = requests.post(
         'https://api.remove.bg/v1.0/removebg',
         files = {'image_file':open(path, 'rb')},
