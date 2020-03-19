@@ -65,6 +65,10 @@ def uploadToImgur(path):
     link = response['link']
     return link
 
+@app.route('/test', methods=['POST'])
+def test():
+    return "ok"
+
 @app.route('/callback', methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
