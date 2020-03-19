@@ -53,6 +53,7 @@ def removebgAPI(path):
         with open(path, 'wb') as out:
             out.write(response.content)
     else:
+        print(response.text)
         return 'failed'
     return path
 
