@@ -2,6 +2,7 @@ import os
 import sys
 import git
 import requests
+import mysql.connector as mysql
 from dotenv import load_dotenv
 from imgurpython import ImgurClient
 from flask import Flask, request, abort
@@ -18,6 +19,14 @@ admin = os.environ['CHIKA_ADMIN'].split(',')
 app = Flask(__name__)
 line_bot_api = LineBotApi(os.environ['LINE_CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['LINE_CHANNEL_SECRET'])
+
+mydb = mysql.connect(
+        host="localhost",
+        user="chika",
+        passwd="chika123.",
+        database="chika"
+    )
+mycursor = mydb.cursor()
 
 imgur_client = ImgurClient(
     os.environ['IMGUR_CLIENT_ID'], 
@@ -89,19 +98,26 @@ def handle_text(event):
     token = event.reply_token
     message = event.message.text
     source = event.source.user_id
-    if message == 'chika self pull':
-        if source in admin:
-            response = chika_repo.pull()
-            response = '[CHIKA REPO]\n' + response
-            line_bot_api.reply_message(token, TextSendMessage(text=response))
-        else:
-            line_bot_api.reply_message(token, TextSendMessage(text='who are you?'))
+    if message.startswith('register as '):
+        sql = "select * from user where line_id='{}'".format(source)
+        mycursor.execute(sql)
+        res = mycursor.fetchall()
+        if len(res) != 0:
+            line_bot_api.reply_message(token, TextSendMessage(text="already exists"))
+            return
+        alias = message.replace('register as ', '')
+        sql = "INSERT INTO user (line_id, alias, role) VALUES (%s, %s, %s)"
+        value = (source, alias, 1 if source in admin else 2)
+        mycursor.execute(sql, value)
+        mydb.commit()
+        line_bot_api.reply_message(token, TextSendMessage(text="success"))
+    elif message == 'chika self pull':
+        response = chika_repo.pull()
+        response = '[CHIKA REPO]\n' + response
+        line_bot_api.reply_message(token, TextSendMessage(text=response))
     elif message == 'chika restart':
-        if source in admin:
-            line_bot_api.reply_message(token, TextSendMessage(text='restarting'))
-            restart()
-        else:
-            line_bot_api.reply_message(token, TextSendMessage(text='who are you?'))
+        line_bot_api.reply_message(token, TextSendMessage(text='restarting'))
+        restart()
     elif message == 'chika test':
         line_bot_api.reply_message(token, TextSendMessage(text='ok'))
     elif message == 'chika userId':
